@@ -3,9 +3,9 @@ import csv
 import threading
 
 timestamper = 0
-ki = 0  # 0 - 3
-kp = 0  # 0 - 2
-kd = 0  # 0 - 3
+ki_init = 0  # 0 - 2
+kp_init = 0.8  # 0.8 - 2
+kd_init = 0.8  # 0.8 - 2
 recording = False
 
 def step_backward():
@@ -59,12 +59,13 @@ if __name__ == '__main__':
     #c = csv.writer(open("MONFICHIER.csv", "wb"))
     Thread = MyThread()
     Thread.start()
-    for p in range(60):
-        kp = p * 0.05
+    for p in range(24):
+        kp = p * 0.05 + kp_init
         for i in range(40):
-            ki = i * 0.05
-            for d in range(60):
-                kd = d*0.05
+            ki = i * 0.05 + ki_init
+            for d in range(24):
+                kd = d*0.05 + kd_init
+                serial_port.write("r\n")
                 set_constante(kp, ki, kd)
                 file = open("./data/{kpp}_{kii}_{kdd}.csv".format(kpp=kp,kii=ki,kdd=kd),'wb')
                 c = csv.writer(file)
