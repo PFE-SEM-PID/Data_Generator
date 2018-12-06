@@ -1,4 +1,5 @@
 from serial import *
+from serial.tools.list_ports import comports
 import csv
 import threading
 
@@ -55,7 +56,11 @@ class MyThread(threading.Thread):
                         c.writerow(list_data)
 
 if __name__ == '__main__':
-    serial_port = Serial(port="COM7", baudrate=9600)
+    if len(comports()) == 0:
+        print "No serial port"
+        exit(0)
+    serial_port = Serial(port=comports()[0].device, baudrate=9600)
+    print "Found device"+comports()[0].device
     #c = csv.writer(open("MONFICHIER.csv", "wb"))
     Thread = MyThread()
     Thread.start()
