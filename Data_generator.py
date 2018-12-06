@@ -66,7 +66,7 @@ if __name__ == '__main__':
             for d in range(60):
                 kd = d*0.05
                 set_constante(kp, ki, kd)
-                file = open("../data/{kpp}_{kii}_{kdd}.csv".format(kpp=kp,kii=ki,kdd=kd),'wb')
+                file = open("./data/{kpp}_{kii}_{kdd}.csv".format(kpp=kp,kii=ki,kdd=kd),'wb')
                 c = csv.writer(file)
                 step_forward()
                 set_constante(0, 0, 0)
