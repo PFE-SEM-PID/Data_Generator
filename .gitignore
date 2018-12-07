@@ -5,3 +5,7 @@
 *.ali
 
 *.idea*
+
+data/
+!data/.upkeep
+nohup.out
