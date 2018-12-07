@@ -50,12 +50,13 @@ class MyThread(threading.Thread):
             timestamper = 0
             while recording == True:
                 if serial_port.isOpen():
-                    data = str(serial_port.readline())
-                    list_data = data.split()
-                    if(list_data[0] != "ORDER"):
-                        list_data[0] = timestamper
-                        timestamper += 50
-                        c.writerow(list_data)
+                    if serial_port.in_waiting != 0:
+                        data = str(serial_port.readline())
+                        list_data = data.split()
+                        if(list_data[0] != "ORDER"):
+                            list_data[0] = timestamper
+                            timestamper += 50
+                            c.writerow(list_data)
 
 if __name__ == '__main__':
     if len(comports()) == 0:
@@ -68,7 +69,7 @@ if __name__ == '__main__':
     Thread.start()
     for p in range(22):
         kp = p * 0.05 + kp_init
-	time.sleep(900)
+        time.sleep(900)
         for i in range(40):
             ki = i * 0.05 + ki_init
             for d in range(24):
