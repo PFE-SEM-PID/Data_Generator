@@ -1,3 +1,5 @@
+#! /usr/bin/env python2
+
 from serial import *
 from serial.tools.list_ports import comports
 import csv
@@ -5,7 +7,7 @@ import threading
 
 timestamper = 0
 ki_init = 0  # 0 - 2
-kp_init = 0.8  # 0.8 - 2
+kp_init = 0.9  # 0.8 - 2
 kd_init = 0.8  # 0.8 - 2
 recording = False
 
@@ -64,8 +66,9 @@ if __name__ == '__main__':
     #c = csv.writer(open("MONFICHIER.csv", "wb"))
     Thread = MyThread()
     Thread.start()
-    for p in range(24):
+    for p in range(22):
         kp = p * 0.05 + kp_init
+	time.sleep(900)
         for i in range(40):
             ki = i * 0.05 + ki_init
             for d in range(24):
