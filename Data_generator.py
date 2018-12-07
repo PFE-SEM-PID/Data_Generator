@@ -20,9 +20,23 @@ def step_backward():
 
 def step_forward():
     start()
-    serial_port.write("p\n")
-    serial_port.write("200\n")
-    time.sleep(1)
+    timestamper = 0
+    first_value = True
+    firt_time = 0
+    while timestamper <= 1000:
+        if serial_port.isOpen():
+            serial_port.write("p\n")
+            serial_port.write("200\n")
+            if serial_port.in_waiting != 0:
+                data = str(serial_port.readline())
+                list_data = data.split()
+                if first_value:
+                    firt_time = list_data[0]
+                    first_value = False
+                if (list_data[0] != "ORDER"):
+                    list_data[0] = list_data[0] - firt_time
+                    timestamper = list_data[0]
+                    c.writerow(list_data)
     stop()
 
 def start():
@@ -42,12 +56,11 @@ def set_constante(a,b,c):
     serial_port.write(str(b)+"\n")
     serial_port.write("kd\n")
     serial_port.write(str(c)+"\n")
-
+"""
 class MyThread(threading.Thread):
     def run(self):
         global recording,timestamp, setpoint, pos_encodeur, pwm_envoye, erreur_derivative, erreur_integrale
         while True:
-            timestamper = 0
             while recording == True:
                 if serial_port.isOpen():
                     if serial_port.in_waiting != 0:
@@ -57,7 +70,7 @@ class MyThread(threading.Thread):
                             list_data[0] = timestamper
                             timestamper += 50
                             c.writerow(list_data)
-
+"""
 if __name__ == '__main__':
     if len(comports()) == 0:
         print "No serial port"
@@ -65,9 +78,9 @@ if __name__ == '__main__':
     serial_port = Serial(port=comports()[0].device, baudrate=9600)
     print "Found device"+comports()[0].device
     #c = csv.writer(open("MONFICHIER.csv", "wb"))
-    Thread = MyThread()
-    Thread.start()
-    for p in range(22):
+    #Thread = MyThread()
+    #Thread.start()
+    for p in range(24):
         kp = p * 0.05 + kp_init
         time.sleep(900)
         for i in range(40):
